@@ -1,6 +1,7 @@
 import model.Customer;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import service.CustomerService;
 
 import java.util.List;
@@ -24,14 +25,17 @@ public class CustomerServiceTest {
     /**
      * 查询用户列表
      */
+    @Test
     public void getCustomerListTest(){
         List<Customer> customers = customerService.getCustomerList();
+        System.out.println(customers);
         Assert.assertEquals(2,customers.size());
     }
 
     /**
      * 查询用户
      */
+    @Test
     public void getCustomerTest(){
         long id = 1;
         Customer customer = customerService.getCustomer(id);
