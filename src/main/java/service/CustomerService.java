@@ -48,37 +48,34 @@ public class CustomerService {
             stam =  connection.createStatement();
             rs = stam.executeQuery(sql);
 
+            Class customerClass = Customer.class;
+            Field[] fields =  customerClass.getDeclaredFields();
             while (rs.next()){
                 Customer customer = new Customer();
-                Class customerClass = Customer.class;
-                Field[] fields =  customerClass.getFields();
                 for (Field field : fields){
                     String fieldName  = field.getName();
-                    fieldName = fieldName.substring(0,1).toUpperCase()+fieldName.substring(1).toLowerCase();
+                    String fieldType = field.getType().getSimpleName();
+                    fieldName = fieldName.substring(0,1).toUpperCase()+fieldName.substring(1);
+                    fieldType = fieldType.substring(0,1).toUpperCase()+fieldType.substring(1);
 
                     Method method = null;
                     Method rsmethod = null;
                     try {
-                        method = customerClass.getMethod("set"+fieldName,long.class);
-                        rsmethod = rs.getClass().getMethod("get"+field.getGenericType());
+                        method = customerClass.getMethod("set"+fieldName,field.getType());
+                        rsmethod = rs.getClass().getMethod("get"+fieldType,String.class);
                     } catch (NoSuchMethodException e) {
                         e.printStackTrace();
                     }
 
                     try {
-                        method.invoke(customer,rsmethod.invoke(rs,field.getName()));
+                        Object param =  rsmethod.invoke(rs, field.getName());//rs.getxxx("xx")
+                        method.invoke(customer,param);//customer.setxxx(param)
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     } catch (InvocationTargetException e) {
                         e.printStackTrace();
                     }
                 }
-//                customer.setId(rs.getLong("id"));
-//                customer.setName(rs.getString("name"));
-//                customer.setContact(rs.getString("contact"));
-//                customer.setEmail(rs.getString("email"));
-//                customer.setTelePhone(rs.getString("telePhone"));
-//                customer.setRemark(rs.getString("remark"));
                 users.add(customer);
             }
 
