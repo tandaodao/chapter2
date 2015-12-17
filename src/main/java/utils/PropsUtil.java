@@ -8,6 +8,10 @@ import java.util.Properties;
  * Created by XR on 2015/12/16.
  */
 public class PropsUtil {
+    /**
+     * 获取资源路径下的jdbcConfig.properties的内容
+     * @return Properties
+     */
     public static Properties getProps() {
         InputStream is = null;
         Properties props = null;

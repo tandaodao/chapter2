@@ -29,7 +29,7 @@ public class CustomerServiceTest {
     public void getCustomerListTest(){
         List<Customer> customers = customerService.getCustomerList();
         System.out.println(customers);
-        Assert.assertEquals(2,customers.size());
+        Assert.assertTrue(customers.size() > 0);
     }
 
     /**
@@ -37,7 +37,7 @@ public class CustomerServiceTest {
      */
     @Test
     public void getCustomerTest(){
-        long id = 1;
+        long id = 2;
         Customer customer = customerService.getCustomer(id);
         Assert.assertNotNull(customer);
     }
@@ -45,33 +45,50 @@ public class CustomerServiceTest {
     /**
      * 创建用户
      */
-    public void CreateCustomerTest(){
+    @Test
+    public void createCustomerTest(){
+        long id = 999;
         Customer customer = new Customer();
-        customer.setId(999);
+        customer.setId(id);
         customer.setName("customer999");
         customer.setContact("mike");
         boolean result = customerService.createCustomer(customer);
+        customerService.deleteCustomer(id);
         Assert.assertTrue(result);
     }
 
     /**
      * 更新用户
      */
+    @Test
     public void updateCustomerTest(){
         long id = 999;
-        Customer customer = customerService.getCustomer(id);
+        Customer customer = createTestCustomer(id);
+        customerService.createCustomer(customer);
+        customer = new Customer();
         customer.setContact("judy");
         customer.setEmail("judy@mail.com");
-        boolean result = customerService.updateCustomer(customer);
+        boolean result = customerService.updateCustomer(customer,id);
         Assert.assertTrue(result);
     }
 
     /**
      * 删除用户
      */
+    @Test
     public void deleteCustomerTest(){
         long id = 999;
+        Customer customer = createTestCustomer(id);
+        customerService.createCustomer(customer);
         boolean result = customerService.deleteCustomer(id);
         Assert.assertTrue(result);
+    }
+
+    private Customer createTestCustomer(long id){
+        Customer customer = new Customer();
+        customer.setId(id);
+        customer.setName("customer999");
+        customer.setContact("mike");
+        return customer;
     }
 }

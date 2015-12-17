@@ -58,4 +58,9 @@ public class Customer {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    @Override
+    public String toString() {
+        return String.format("id:%s name:%s contact:%s telePhone:%s email:%s remark:%s", id, name, contact, telePhone, email, remark);
+    }
 }
